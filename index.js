@@ -31,11 +31,35 @@ async function run() {
       const page =parseInt(req.query.page)
       const size =parseInt(req.query.size)
       const search =req.query.search
-      console.log('search ',search)
      
-      let query = { ProductName: { $regex: search, $options: 'i' } };
+     const sort =req.query.sort
+     const recent=req.query.recent
+     let categories=req.query.categories
+     if(categories==='All'){
+
+     }
+     
+      let query = { 
+        ProductName: { $regex: search, $options: 'i' },
+        Category:categories==="All"?{ $in: ['Phone', 'Laptop', 'camera', 'Smartwatch', 'HeadPhone','Speaker'] }:categories
+        // sort:{}
+
+       };
+    //    const option = {
+    //     sort: {
+    //         Price: sort === 'asc' ? 1 : -1, // Sort by Price (ascending or descending)
+    //         ProductCreationDateTime: recent === 'new' ? -1 : 1 // Sort by ProductCreationDateTime (newest first or oldest first)
+    //     }
+    // };
+    const sortFields = {};
+if (sort) {
+    sortFields.Price = sort === 'asc' ? 1 : -1;
+}
+else  {
+    sortFields.ProductCreationDateTime = recent === 'new' ? -1 : 1;
+}
     
-        const result =await productsCollection.find(query).skip(page*size).limit(size).toArray()
+        const result =await productsCollection.find(query).sort(sortFields).skip(page*size).limit(size).toArray()
         res.send(result)
 
     })
