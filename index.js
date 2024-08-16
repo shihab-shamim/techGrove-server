@@ -36,12 +36,15 @@ async function run() {
      const recent=req.query.recent
      const categories=req.query.categories
      const brand=req.query.brand
+     const price=req.query.price.split(',')
+     console.log('price',parseInt(price[0]))
     
      
       let query = { 
         ProductName: { $regex: search , $options: 'i' },
         Category:categories==="All"?{ $in: ['Phone', 'Laptop', 'camera', 'Smartwatch', 'HeadPhone','Speaker'] }:categories,
         BrandName:{ $regex: brand , $options: 'i' },
+        Price:{$gt:parseInt(price[0]),$lt:parseInt(price[1])}
         // sort:{}
 
        };
