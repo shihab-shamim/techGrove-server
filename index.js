@@ -34,14 +34,14 @@ async function run() {
      
      const sort =req.query.sort
      const recent=req.query.recent
-     let categories=req.query.categories
-     if(categories==='All'){
-
-     }
+     const categories=req.query.categories
+     const brand=req.query.brand
+    
      
       let query = { 
-        ProductName: { $regex: search, $options: 'i' },
-        Category:categories==="All"?{ $in: ['Phone', 'Laptop', 'camera', 'Smartwatch', 'HeadPhone','Speaker'] }:categories
+        ProductName: { $regex: search , $options: 'i' },
+        Category:categories==="All"?{ $in: ['Phone', 'Laptop', 'camera', 'Smartwatch', 'HeadPhone','Speaker'] }:categories,
+        BrandName:{ $regex: brand , $options: 'i' },
         // sort:{}
 
        };
@@ -64,6 +64,7 @@ else  {
 
     })
     app.get('/productsCount',async(req,res)=>{
+      const result=await productsCollection.find().toArray()
       const count =await productsCollection.estimatedDocumentCount();
       res.send({count})
     })
