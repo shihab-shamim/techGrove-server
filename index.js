@@ -23,10 +23,6 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const productsCollection = client.db("jobsTask").collection("electronic");
-    // Connect the client to the server	(optional starting in v4.7)
-    // await client.connect();
-    // Send a ping to confirm a successful connection
-    // await client.db("admin").command({ ping: 1 });
     app.get('/products',async(req,res)=>{
       const page =parseInt(req.query.page)
       const size =parseInt(req.query.size)
@@ -45,15 +41,10 @@ async function run() {
         Category:categories==="All"?{ $in: ['Phone', 'Laptop', 'camera', 'Smartwatch', 'HeadPhone','Speaker'] }:categories,
         BrandName:{ $regex: brand , $options: 'i' },
         Price:{$gt:parseInt(price[0]),$lt:parseInt(price[1])}
-        // sort:{}
+      
 
        };
-    //    const option = {
-    //     sort: {
-    //         Price: sort === 'asc' ? 1 : -1, // Sort by Price (ascending or descending)
-    //         ProductCreationDateTime: recent === 'new' ? -1 : 1 // Sort by ProductCreationDateTime (newest first or oldest first)
-    //     }
-    // };
+   
     const sortFields = {};
 if (sort) {
     sortFields.Price = sort === 'asc' ? 1 : -1;
@@ -73,8 +64,7 @@ else  {
     })
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
-    // Ensures that the client will close when you finish/error
-    // await client.close();
+   
   }
 }
 run().catch(console.dir);
